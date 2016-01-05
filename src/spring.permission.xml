@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+	    	http://www.springframework.org/schema/aop 
+	    	http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	 <import resource="spring.xml"/>	 
+	 
+	 
+	 
+	 <!-- 角色的service -->
+	<bean id="roleService" class="com.common.permission.service.impl.RoleServiceImpl">
+		 <property name="sessionFactory" ref="sessionFactory" />  
+	</bean>
+	<!-- 权限的service -->
+	<bean id="permissionService" class="com.common.permission.service.impl.PermissionServiceImpl">
+		<property name="sessionFactory" ref="sessionFactory" />  
+	</bean>
+	<!-- 角色和用户service -->
+	<bean id="roleUserService" class="com.common.permission.service.impl.RoleUserServiceImpl" >
+			<property name="sessionFactory" ref="sessionFactory" />  
+	</bean>
+	
+	<!-- 角色和权限的service -->
+	<bean id="rolePermissionServiceImpl" class="com.common.permission.service.impl.RolePermissionServiceImpl">
+			<property name="sessionFactory" ref="sessionFactory" />  
+	</bean>
+	
+	<!-- 角色的action -->
+	<bean id="roleListAction" class="com.common.permission.actions.RoleAction" scope="prototype"
+		lazy-init="true">
+		<property name="roleService" ref="roleService"></property>
+		<property name="rolePermissionService" ref="rolePermissionServiceImpl"></property>
+	</bean>
+	
+	<!-- 权限的action -->
+	<bean id="permissionAction" class="com.common.permission.actions.PermissionAction" scope="prototype"
+		lazy-init="true">
+		<property name="permissionService" ref="permissionService"></property>
+	</bean>
+	
+	<!-- 角色和权限的action -->
+	<bean id="rolePermissionAction" class="com.common.permission.actions.RolePermissionAction" scope="prototype"
+		lazy-init="true">
+		<property name="rolePermissionService" ref="rolePermissionServiceImpl"></property>
+		<property name="permissionAction" ref="permissionAction"></property>
+	</bean>
+	
+	<!-- 用户角色的action -->
+	<bean id="userRole" class="com.common.permission.actions.UserRoleAction" scope="prototype"
+		lazy-init="true"> 
+		<property name="roleUserService" ref="roleUserService"></property>
+		<!-- 将 exteriorService实现类注入此属性
+		<property name="exteriorService" ref="managerService"></property>-->
+	</bean>
+</beans>

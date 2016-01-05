@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/cloud-config-ejb" xmlns:tns="http://www.example.org/cloud-config-ejb" elementFormDefault="qualified">
+	<element name="cloud">
+		<complexType>
+			<sequence>
+				<element name="email-config" type="tns:temail"  minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="cached" type="tns:tcached" minOccurs="0" maxOccurs="1"/>
+			</sequence>
+		</complexType>		
+	</element>
+
+	<complexType name="tcached">
+		<sequence>
+			<!-- 系统清理缓存的时间间隔，单位:秒 -->
+			<element name="clean-interval" type="int"/>
+			<!-- 被缓存内容在缓存中的超时秒数，单位:秒 -->
+			<element name="cached-timeout" type="int"/>
+			<!-- 缓存更新的方式，目前只能为1或者0，为0表示需要更新缓存list里面的内容，为1表示需要删除缓存，重新从数据库查找 -->
+			<element name="cached-method" type="int"/>
+			<!-- 允许缓存的实体类的完全限定名 -->
+			<element name="class" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- 不需要缓存的QueryLanguage(ql)-->
+			<element name="ql" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			
+		</sequence>
+	</complexType>
+
+	<complexType name="temail">
+		<sequence>
+			<element name="server-dns" type="string"></element>
+			<element name="server-port" type="int"></element>
+			<element name="user-name" type="string"></element>
+			<element name="user-password" type="string"></element>
+			<!-- 发送邮件时的签名 -->
+			<element name="signature" type="string" ></element>			
+		</sequence>
+	</complexType>
+</schema>
